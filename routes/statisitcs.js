@@ -16,10 +16,9 @@ router.get("/:sport/:season", async (req, res) => {
       {
         $project: {
           _id: false,
-          player_id: true,
-          player_name: {
-            $concat: ["$player.first_name", " ", "$player.last_name"],
-          },
+          id: "$player_id",
+          first_name: "$player.first_name",
+          last_name: "$player.last_name",
           stats: true,
           position: { $last: "$player.fantasy_positions" }, //Last element in positions array
         },
