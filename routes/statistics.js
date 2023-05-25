@@ -1,16 +1,18 @@
 import { Router } from "express";
-import Statistics from "../models/Statistics.js";
+import Statistics from "../models/Statistic.js";
 
 const router = Router();
 
 router.get("/:sport/:season/:week?", async (req, res) => {
   try {
+    console.log(req.params.week);
     const statistics = await Statistics.aggregate([
       {
         $match: {
           sport: req.params.sport,
           season: req.params.season,
-          week: req.params.week,
+          week:
+            req.params.week === undefined ? null : parseInt(req.params.week),
           "stats.gp": { $ne: null }, //Games played
         },
       },

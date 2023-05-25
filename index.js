@@ -5,7 +5,9 @@ import { config } from "dotenv";
 import morgan from "morgan";
 import helmet from "helmet";
 import projectionsRouter from "./routes/projections.js";
-import statisticsRouter from "./routes/statisitcs.js";
+import statisticsRouter from "./routes/statistics.js";
+import { fetchYearsAndWeeksStatisticsData } from "./data/statistics.js";
+import { fetchYearsAndWeeksProjectionsData } from "./data/projections.js";
 
 config();
 const app = express();
@@ -30,6 +32,10 @@ mongoose
   })
   .then(() => {
     console.log("Connected to Database");
+
+    // Fetch and store data
+    // fetchYearsAndWeeksProjectionsData(); // RUN PERIODICALLY
+    // fetchYearsAndWeeksStatisticsData(); // RUN ONLY ONCE
   })
   .catch((error) => console.log(`${error} did not connect`));
 

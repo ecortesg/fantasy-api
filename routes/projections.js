@@ -1,5 +1,5 @@
 import { Router } from "express";
-import Projections from "../models/Projections.js";
+import Projections from "../models/Projection.js";
 
 const router = Router();
 
