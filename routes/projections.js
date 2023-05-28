@@ -10,7 +10,7 @@ router.get("/:sport/:season", async (req, res) => {
         $match: {
           sport: req.params.sport,
           season: req.params.season,
-          stats: { $ne: {} },
+          stats: { $exists: true, $ne: {} },
         },
       },
       {
