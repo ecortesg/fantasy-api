@@ -6,8 +6,8 @@ REST API that serves statistics and projections data for Fantasy sports tools.
 
 ### Projections
 
-Structure: /projections/:sport/:season
-Example: /projections/nfl/2023
+- Structure: `/projections/:sport/:season`
+- Example: `/projections/nfl/2023`
 
 ```
 [
@@ -23,8 +23,8 @@ Example: /projections/nfl/2023
 
 ### Statistics
 
-Structure: /statistics/:sport/:season/:week
-Example: /statistics/nfl/2022/1
+- Structure: `/statistics/:sport/:season/:week`
+- Example: `/statistics/nfl/2022/1`
 
 ```
 [
