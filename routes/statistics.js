@@ -5,7 +5,6 @@ const router = Router();
 
 router.get("/:sport/:season/:week?", async (req, res) => {
   try {
-    console.log(req.params.week);
     const statistics = await Statistics.aggregate([
       {
         $match: {
