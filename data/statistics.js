@@ -11,7 +11,7 @@ async function fetchAndStoreStatisticsData(year, week) {
     const response = await axios.get(url, {
       params: {
         season_type: "regular",
-        position: ["DEF", "K", "QB", "RB", "TE", "WR"],
+        position: ["DB", "DEF", "DL", "K", "LB", "QB", "RB", "TE", "WR"],
         order_by: "pts_half_ppr",
       },
     });
@@ -48,7 +48,7 @@ export async function fetchYearsAndWeeksStatisticsData() {
   const years = [
     2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020,
     2021, 2022,
-  ]; // Add more years if needed
+  ];
   const weeks = [...Array(18).keys()].map((week) => week + 1);
 
   for (const year of years) {

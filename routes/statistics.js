@@ -12,7 +12,7 @@ router.get("/:sport/:season/:week?", async (req, res) => {
           season: req.params.season,
           week:
             req.params.week === undefined ? null : parseInt(req.params.week),
-          "stats.gp": { $ne: null }, //Games played
+          "stats.gp": { $ne: null }, // Games played
         },
       },
       {
@@ -22,7 +22,7 @@ router.get("/:sport/:season/:week?", async (req, res) => {
           first_name: "$player.first_name",
           last_name: "$player.last_name",
           stats: true,
-          position: { $last: "$player.fantasy_positions" }, //Last element in positions array
+          position: { $last: "$player.fantasy_positions" }, // Last element in positions array
         },
       },
     ]);
