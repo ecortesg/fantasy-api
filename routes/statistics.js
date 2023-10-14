@@ -21,6 +21,7 @@ router.get("/:sport/:season/:week?", async (req, res) => {
           id: "$player_id",
           first_name: "$player.first_name",
           last_name: "$player.last_name",
+          team: "$team",
           stats: true,
           position: { $last: "$player.fantasy_positions" }, // Last element in positions array
         },
