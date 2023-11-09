@@ -6,7 +6,10 @@ import morgan from "morgan";
 import helmet from "helmet";
 import projectionsRouter from "./routes/projections.js";
 import statisticsRouter from "./routes/statistics.js";
-import { fetchYearsAndWeeksStatisticsData } from "./data/statistics.js";
+import {
+  fetchYearsAndWeeksStatisticsData,
+  deleteStatisticsData,
+} from "./data/statistics.js";
 import { fetchYearsAndWeeksProjectionsData } from "./data/projections.js";
 
 config();
@@ -32,6 +35,9 @@ mongoose
   })
   .then(() => {
     console.log("Connected to Database");
+
+    // Delete data
+    // deleteStatisticsData("2023", null);
 
     // Fetch and store data
     // fetchYearsAndWeeksProjectionsData(); // RUN PERIODICALLY

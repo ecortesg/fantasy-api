@@ -43,20 +43,56 @@ async function fetchAndStoreStatisticsData(year, week) {
   }
 }
 
+// Function to generate an array of years
+function generateYearsArray(startYear, endYear) {
+  const yearsArray = Array.from(
+    { length: endYear - startYear + 1 },
+    (_, index) => startYear + index
+  );
+  return yearsArray;
+}
+
 // Function to fetch data for multiple years and weeks
 export async function fetchYearsAndWeeksStatisticsData() {
-  const years = [
-    2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020,
-    2021, 2022,
-  ];
-  const weeks = [...Array(18).keys()].map((week) => week + 1);
+  const years = generateYearsArray(2023, 2023);
+  const weeks = [...Array(8).keys()].map((week) => week + 1);
 
   for (const year of years) {
     for (const week of weeks) {
       await fetchAndStoreStatisticsData(year, week);
     }
+    await fetchAndStoreStatisticsData(year, 9);
 
     // Fetch data for the entire season (week = null)
     await fetchAndStoreStatisticsData(year, null);
+  }
+}
+
+// Delete statistics data
+export async function deleteStatisticsData(year, week) {
+  try {
+    await Statistic.deleteMany({ season: year, week: week });
+
+    if (week) {
+      console.log(
+        `Statistics data for ${year}, Week ${week} deleted successfully.`
+      );
+    } else {
+      console.log(
+        `Statistics data for ${year}, entire season deleted successfully.`
+      );
+    }
+  } catch (error) {
+    if (week) {
+      console.error(
+        `Error deleting statistics data for ${year}, Week ${week}:`,
+        error
+      );
+    } else {
+      console.error(
+        `Error deleting statistics data for ${year}, entire season:`,
+        error
+      );
+    }
   }
 }
