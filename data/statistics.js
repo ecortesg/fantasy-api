@@ -43,35 +43,10 @@ async function fetchAndStoreStatisticsData(year, week) {
   }
 }
 
-// Function to generate an array of years
-function generateYearsArray(startYear, endYear) {
-  const yearsArray = Array.from(
-    { length: endYear - startYear + 1 },
-    (_, index) => startYear + index
-  );
-  return yearsArray;
-}
-
-// Function to fetch data for multiple years and weeks
-export async function fetchYearsAndWeeksStatisticsData() {
-  const years = generateYearsArray(2023, 2023);
-  const weeks = [...Array(8).keys()].map((week) => week + 1);
-
-  for (const year of years) {
-    for (const week of weeks) {
-      await fetchAndStoreStatisticsData(year, week);
-    }
-    await fetchAndStoreStatisticsData(year, 9);
-
-    // Fetch data for the entire season (week = null)
-    await fetchAndStoreStatisticsData(year, null);
-  }
-}
-
 // Delete statistics data
 export async function deleteStatisticsData(year, week) {
   try {
-    await Statistic.deleteMany({ season: year, week: week });
+    await Statistic.deleteMany({ season: year.toString(), week: week });
 
     if (week) {
       console.log(
@@ -94,5 +69,46 @@ export async function deleteStatisticsData(year, week) {
         error
       );
     }
+  }
+}
+
+// Function to generate an array containing the numbers within a range
+function range(start, end) {
+  const arr = Array.from(
+    { length: end - start + 1 },
+    (_, index) => start + index
+  );
+  return arr;
+}
+
+// Function to fetch data for multiple years and weeks
+export async function fetchYearsAndWeeksStatisticsData() {
+  const years = range(2023, 2023);
+  const weeks = range(1, 18);
+
+  // Fetch weekly data
+  for (const year of years) {
+    for (const week of weeks) {
+      await fetchAndStoreStatisticsData(year, week);
+    }
+
+    // Fetch data for the entire season (week = null)
+    await fetchAndStoreStatisticsData(year, null);
+  }
+}
+
+// Function to delete data for multiple years and weeks
+export async function deleteYearsAndWeeksStatisticsData() {
+  const years = range(2023, 2023);
+  const weeks = range(1, 18);
+
+  // Delete weekly data
+  for (const year of years) {
+    for (const week of weeks) {
+      await deleteStatisticsData(year, week);
+    }
+
+    // Delete data for the entire season (week = null)
+    await deleteStatisticsData(year, null);
   }
 }

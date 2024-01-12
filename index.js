@@ -8,7 +8,7 @@ import projectionsRouter from "./routes/projections.js";
 import statisticsRouter from "./routes/statistics.js";
 import {
   fetchYearsAndWeeksStatisticsData,
-  deleteStatisticsData,
+  deleteYearsAndWeeksStatisticsData,
 } from "./data/statistics.js";
 import { fetchYearsAndWeeksProjectionsData } from "./data/projections.js";
 
@@ -36,12 +36,14 @@ mongoose
   .then(() => {
     console.log("Connected to Database");
 
-    // Delete data
-    // deleteStatisticsData("2023", null);
+    // Delete historic data
+    // deleteYearsAndWeeksStatisticsData();
 
-    // Fetch and store data
-    // fetchYearsAndWeeksProjectionsData(); // RUN PERIODICALLY
-    // fetchYearsAndWeeksStatisticsData(); // RUN ONLY ONCE
+    // Fetch and store historic data
+    // fetchYearsAndWeeksStatisticsData();
+
+    // Update projected data
+    // fetchYearsAndWeeksProjectionsData();
   })
   .catch((error) => console.log(`${error} did not connect`));
 
