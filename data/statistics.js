@@ -2,7 +2,7 @@ import axios from "axios";
 import Statistic from "../models/Statistic.js";
 
 // Fetch and store statistics data
-async function fetchAndStoreStatisticsData(year, week) {
+async function fetchAndStoreStatisticsData(year, week, season_type) {
   try {
     const url = week
       ? `https://api.sleeper.com/stats/nfl/${year}/${week}`
@@ -10,7 +10,7 @@ async function fetchAndStoreStatisticsData(year, week) {
 
     const response = await axios.get(url, {
       params: {
-        season_type: "regular",
+        season_type: season_type, // regular or post
         position: ["DB", "DEF", "DL", "K", "LB", "QB", "RB", "TE", "WR"],
         order_by: "pts_half_ppr",
       },
@@ -19,56 +19,42 @@ async function fetchAndStoreStatisticsData(year, week) {
     const data = response.data;
     await Statistic.insertMany(data);
 
-    if (week) {
-      console.log(
-        `Statistics data for ${year}, Week ${week} stored successfully.`
-      );
-    } else {
-      console.log(
-        `Statistics data for ${year}, entire season stored successfully.`
-      );
-    }
+    console.log(
+      `Statistics data for ${
+        week ? "week " + week + " of the" : "the"
+      } ${year} ${season_type} season stored successfully.`
+    );
   } catch (error) {
-    if (week) {
-      console.error(
-        `Error fetching or storing statistics data for ${year}, Week ${week}:`,
-        error
-      );
-    } else {
-      console.error(
-        `Error fetching or storing statistics data for ${year}, entire season:`,
-        error
-      );
-    }
+    console.log(
+      `Error storing statistics data for ${
+        week ? "week " + week + " of the" : "the"
+      } ${year} ${season_type} season:`,
+      error
+    );
   }
 }
 
 // Delete statistics data
-export async function deleteStatisticsData(year, week) {
+export async function deleteStatisticsData(year, week, season_type) {
   try {
-    await Statistic.deleteMany({ season: year.toString(), week: week });
+    await Statistic.deleteMany({
+      season: year.toString(),
+      week: week,
+      season_type: season_type,
+    });
 
-    if (week) {
-      console.log(
-        `Statistics data for ${year}, Week ${week} deleted successfully.`
-      );
-    } else {
-      console.log(
-        `Statistics data for ${year}, entire season deleted successfully.`
-      );
-    }
+    console.log(
+      `Statistics data for ${
+        week ? "week " + week + " of the" : "the"
+      } ${year} ${season_type} season deleted successfully.`
+    );
   } catch (error) {
-    if (week) {
-      console.error(
-        `Error deleting statistics data for ${year}, Week ${week}:`,
-        error
-      );
-    } else {
-      console.error(
-        `Error deleting statistics data for ${year}, entire season:`,
-        error
-      );
-    }
+    console.log(
+      `Error deleting statistics data for ${
+        week ? "week " + week + " of the" : "the"
+      } ${year} ${season_type} season:`,
+      error
+    );
   }
 }
 
@@ -83,17 +69,17 @@ function range(start, end) {
 
 // Function to fetch data for multiple years and weeks
 export async function fetchYearsAndWeeksStatisticsData() {
-  const years = range(2023, 2023);
-  const weeks = range(1, 18);
+  const years = range(2015, 2022);
+  const weeks = range(1, 4);
 
   // Fetch weekly data
   for (const year of years) {
     for (const week of weeks) {
-      await fetchAndStoreStatisticsData(year, week);
+      await fetchAndStoreStatisticsData(year, week, "post");
     }
 
     // Fetch data for the entire season (week = null)
-    await fetchAndStoreStatisticsData(year, null);
+    await fetchAndStoreStatisticsData(year, null, "post");
   }
 }
 
@@ -105,10 +91,10 @@ export async function deleteYearsAndWeeksStatisticsData() {
   // Delete weekly data
   for (const year of years) {
     for (const week of weeks) {
-      await deleteStatisticsData(year, week);
+      await deleteStatisticsData(year, week, "regular");
     }
 
     // Delete data for the entire season (week = null)
-    await deleteStatisticsData(year, null);
+    await deleteStatisticsData(year, null, "regular");
   }
 }
