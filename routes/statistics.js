@@ -1,7 +1,7 @@
-import { Router } from "express";
-import Statistics from "../models/Statistic.js";
+import { Router } from "express"
+import Statistics from "../models/Statistic.js"
 
-const router = Router();
+const router = Router()
 
 router.get("/:sport/:season/:season_type/:week?", async (req, res) => {
   try {
@@ -27,11 +27,11 @@ router.get("/:sport/:season/:season_type/:week?", async (req, res) => {
           position: { $last: "$player.fantasy_positions" }, // Last element in positions array
         },
       },
-    ]);
-    res.json(statistics);
+    ])
+    res.json(statistics)
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: err.message })
   }
-});
+})
 
-export default router;
+export default router

@@ -1,7 +1,7 @@
-import { Router } from "express";
-import Projections from "../models/Projection.js";
+import { Router } from "express"
+import Projections from "../models/Projection.js"
 
-const router = Router();
+const router = Router()
 
 router.get("/:sport/:season", async (req, res) => {
   try {
@@ -20,14 +20,14 @@ router.get("/:sport/:season", async (req, res) => {
           first_name: "$player.first_name",
           last_name: "$player.last_name",
           stats: true,
-          position: { $last: "$player.fantasy_positions" }, //Last element in positions array
+          position: { $last: "$player.fantasy_positions" }, // Last element in positions array
         },
       },
-    ]);
-    res.json(projections);
+    ])
+    res.json(projections)
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ message: err.message })
   }
-});
+})
 
-export default router;
+export default router
