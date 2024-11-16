@@ -1,5 +1,6 @@
 import Statistic from "../models/Statistic.js"
 import { range } from "../lib/utils.js"
+import { getStatistics } from "./api.js"
 
 // Fetch and store statistics data
 async function fetchAndStoreStatisticsData(year, week, seasonType) {
@@ -50,7 +51,7 @@ export async function deleteStatisticsData(year, week, seasonType) {
 // Function to fetch data for multiple years and weeks
 export async function fetchYearsAndWeeksStatisticsData() {
   const years = range(2024, 2024)
-  const weeks = range(2, 6)
+  const weeks = range(10, 10)
 
   // Fetch weekly data
   for (const year of years) {
@@ -70,11 +71,11 @@ export async function deleteYearsAndWeeksStatisticsData() {
 
   // Delete weekly data
   for (const year of years) {
-    for (const week of weeks) {
-      await deleteStatisticsData(year, week, "post")
-    }
+    // for (const week of weeks) {
+    //   await deleteStatisticsData(year, week, "post")
+    // }
 
     // Delete data for the entire season (week = null)
-    await deleteStatisticsData(year, null, "post")
+    await deleteStatisticsData(year, null, "regular")
   }
 }

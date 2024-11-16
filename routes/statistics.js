@@ -35,3 +35,42 @@ router.get("/:sport/:season/:season_type/:week?", async (req, res) => {
 })
 
 export default router
+
+router.get(
+  "/players/:sport/:season/:season_type/:player_ids/:week?",
+  async (req, res) => {
+    try {
+      const playerIds = req.params.player_ids.split(",")
+
+      const week =
+        req.params.week === undefined ? null : parseInt(req.params.week)
+
+      const matchConditions = {
+        sport: req.params.sport,
+        season: req.params.season,
+        season_type: req.params.season_type,
+        player_id: { $in: playerIds },
+        week,
+      }
+
+      const statistics = await Statistics.aggregate([
+        { $match: matchConditions },
+        {
+          $project: {
+            _id: false,
+            id: "$player_id",
+            first_name: "$player.first_name",
+            last_name: "$player.last_name",
+            team: "$team",
+            stats: true,
+            position: "$player.fantasy_positions",
+          },
+        },
+      ])
+
+      res.json(statistics)
+    } catch (err) {
+      res.status(500).json({ message: err.message })
+    }
+  }
+)
